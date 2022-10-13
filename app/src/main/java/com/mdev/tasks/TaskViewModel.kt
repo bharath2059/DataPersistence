@@ -7,6 +7,7 @@ import kotlinx.coroutines.launch
 
 class TasksViewModel(val dao: TaskDao) : ViewModel() {
     var newTaskName = ""
+    var taskId = ""
 
     private val tasks = dao.getAll()
     val tasksString = Transformations.map(tasks) {
@@ -19,6 +20,16 @@ class TasksViewModel(val dao: TaskDao) : ViewModel() {
             val task = Task()
             task.taskName = newTaskName
             dao.insert(task)
+        }
+    }
+
+    //to delete a task
+
+    fun deleteTask(){
+        viewModelScope.launch {
+            val task = Task()
+            task.taskID = taskId.toLong()
+            dao.delete(task)
         }
     }
 
